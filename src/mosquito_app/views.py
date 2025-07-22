@@ -1,7 +1,6 @@
+from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry
 from django.utils import timezone
-from django.conf import settings
-
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -13,6 +12,9 @@ from src.mosquito_app.serializers import (IdentificationTaskSerializer,
 
 
 class IdentificationTaskViewSet(viewsets.ModelViewSet):
+    """
+    Viewset for handling identification tasks.
+    """
     queryset = IdentificationTask.objects.all()
     serializer_class = IdentificationTaskSerializer
 
@@ -24,6 +26,9 @@ class IdentificationTaskViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='filter-by-specie')
     def filter_by_specie(self, request):
+        """
+        Endpoint to filter identification tasks by specie.
+        """
         specie = request.GET.get('specie')
         if not specie:
             return Response({'status': 'error', 'message': 'specie parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -47,6 +52,10 @@ class IdentificationTaskViewSet(viewsets.ModelViewSet):
         }, status=status.HTTP_200_OK)
 
 class ObservationViewSet(viewsets.ModelViewSet):
+    """
+    Viewset for handling mosquito observations.
+    """
+
     queryset = Observation.objects.all()
     serializer_class = ObservationSerializer
 
@@ -55,6 +64,7 @@ class ObservationViewSet(viewsets.ModelViewSet):
         """
         Endpoint to submit a mosquito observation.
         """
+
         try:
             date = request.data.get("date") or timezone.now()
             location_data = request.data.get("location")

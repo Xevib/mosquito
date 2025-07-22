@@ -1,6 +1,8 @@
-from .classifier import AIClassifier
 import random
+
+from .classifier import AIClassifier
 from .constants import SPECIE_CHOICES
+
 
 class FakeClassifier(AIClassifier):
     """

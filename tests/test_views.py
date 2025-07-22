@@ -1,13 +1,16 @@
 import pytest
 from django.urls import reverse
-from django.contrib.auth.models import User
-from src.mosquito_app.models.observation import Observation
+
 from src.mosquito_app.models.identification_task import IdentificationTask
-from rest_framework import viewsets
+from src.mosquito_app.models.observation import Observation
 
 
 @pytest.mark.django_db
 def test_create_identification_task(client):
+    """
+    Tests the creation of an identification task.
+    """
+
     obs = Observation.objects.create(
         date="2024-07-21 00:00:00",
         location="POINT(1 2)",
@@ -24,6 +27,10 @@ def test_create_identification_task(client):
 
 @pytest.mark.django_db
 def test_update_identification_task(client):
+    """
+    Tests the update of an identification task.
+    """
+
     obs = Observation.objects.create(
         date="2024-07-21 00:00:00",
         location="POINT(1 2)",
@@ -43,6 +50,10 @@ def test_update_identification_task(client):
 
 @pytest.mark.django_db
 def test_delete_identification_task(client):
+    """
+    Tests the deletion of an identification task.
+    """
+
     obs = Observation.objects.create(
         date="2024-07-21 00:00:00",
         location="POINT(1 2)",
@@ -56,6 +67,10 @@ def test_delete_identification_task(client):
 
 @pytest.mark.django_db
 def test_filter_identification_tasks_by_specie_missing_param(client):
+    """
+    Tests filtering identification tasks by specie without providing the specie parameter.
+    """
+
     url = reverse("task-filter-by-specie")
     response = client.get(url)
     assert response.status_code == 400
@@ -63,6 +78,10 @@ def test_filter_identification_tasks_by_specie_missing_param(client):
 
 @pytest.mark.django_db
 def test_filter_identification_tasks_by_specie_invalid_specie(client):
+    """
+    Tests filtering identification tasks by specie with an invalid specie parameter.
+    """
+
     url = reverse("task-filter-by-specie")
     response = client.get(url, {"specie": "not_a_specie"})
     assert response.status_code == 400
@@ -70,6 +89,10 @@ def test_filter_identification_tasks_by_specie_invalid_specie(client):
 
 @pytest.mark.django_db
 def test_submit_observation_success(client):
+    """
+    Tests submitting a valid observation.
+    """
+
     url = reverse("observation-submit-observation")
     data = {
         "date": "2024-07-21",
@@ -85,6 +108,10 @@ def test_submit_observation_success(client):
 
 @pytest.mark.django_db
 def test_submit_observation_missing_location(client):
+    """
+    Tests submitting an observation without a location.
+    """
+
     url = reverse("observation-submit-observation")
     data = {
         "date": "2024-07-21",
@@ -96,6 +123,10 @@ def test_submit_observation_missing_location(client):
 
 @pytest.mark.django_db
 def test_submit_observation_wrong_method(client):
+    """
+    Tests submitting an observation with a wrong HTTP method.
+    """
+
     url = reverse("observation-submit-observation")
     response = client.get(url)
     assert response.status_code == 405
@@ -103,6 +134,10 @@ def test_submit_observation_wrong_method(client):
 
 @pytest.mark.django_db
 def test_observation_retrieve(client):
+    """
+    Tests retrieving an observation by ID.
+    """
+
     obs = Observation.objects.create(
         date="2024-07-21 00:00:00",
         location="POINT(1 2)",
@@ -117,6 +152,10 @@ def test_observation_retrieve(client):
 
 @pytest.mark.django_db
 def test_observation_update(client):
+    """
+    Tests updating an observation.
+    """
+
     obs = Observation.objects.create(
         date="2024-07-21 00:00:00",
         location="POINT(1 2)",
@@ -137,6 +176,10 @@ def test_observation_update(client):
 
 @pytest.mark.django_db
 def test_observation_delete(client):
+    """
+    Tests deleting an observation.
+    """
+
     obs = Observation.objects.create(
         date="2024-07-21 00:00:00",
         location="POINT(1 2)",
@@ -145,4 +188,4 @@ def test_observation_delete(client):
     url = reverse("observation-detail", args=[obs.id])
     response = client.delete(url)
     assert response.status_code == 204
-
+    assert not IdentificationTask.objects.filter(observation=obs).exists()

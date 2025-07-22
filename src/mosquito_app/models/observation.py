@@ -1,8 +1,10 @@
-from django.contrib.gis.db import models
-from src.mosquito_app.constants import SPECIE_CHOICES
 from .abstract_observation import AbstractObservation
 
+
 class Observation(AbstractObservation):
+    """
+    Model representing a mosquito observation.
+    """
     pass
 
     class Meta:

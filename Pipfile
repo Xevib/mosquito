@@ -10,6 +10,7 @@ pillow = "*"
 celery = "*"
 redis = "*"
 djangorestframework = "*"
+pylint-django = "*"
 
 [dev-packages]
 pytest = "*"

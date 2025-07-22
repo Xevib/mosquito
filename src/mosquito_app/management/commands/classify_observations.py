@@ -4,10 +4,13 @@ from src.mosquito_app.fake_classifier import FakeClassifier
 from src.mosquito_app.tasks import classify_observation
 
 class Command(BaseCommand):
+    """
+    Command to classify all observations without a specie using Celery tasks.
+    """
+
     help = "Classify all observations without a specie"
 
     def handle(self, *args, **options):
-        classifier = FakeClassifier()
         identification_tasks = IdentificationTask.objects.filter(specie__isnull=True, task_type='ai')
         count = 0
         for task in identification_tasks:
@@ -18,7 +21,6 @@ class Command(BaseCommand):
                 "srid": task.observation.location.srid
             }
             if task.observation.image:
-                # Assuming the image is stored in a field named 'image'
                 with task.observation.image.open("rb"):
                     data["image"] = task.observation.image.read()
 

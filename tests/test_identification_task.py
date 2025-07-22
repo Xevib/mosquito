@@ -6,6 +6,10 @@ from src.mosquito_app.models.identification_task import IdentificationTask
 
 @pytest.mark.django_db
 def test_identification_task_creation():
+    """
+    Test the creation of an IdentificationTask.
+    """
+
     user = User.objects.create(username="tester")
     obs = Observation.objects.create(
         date="2024-07-21",

@@ -2,6 +2,10 @@ from django.contrib.gis.db import models
 from src.mosquito_app.constants import SPECIE_CHOICES
 
 class AbstractObservation(models.Model):
+    """
+    Abstract model representing a mosquito observation.
+    """
+
     date = models.DateTimeField()
     location = models.PointField()
     specie = models.CharField(

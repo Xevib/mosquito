@@ -6,8 +6,9 @@ from src.mosquito_app.constants import IDENTIFICAION_TYPES_CHOICES
 class IdentificationTask(AbstractObservation):
     """
     Model for managing identification tasks for mosquito observations.
-    Inherits from Observation to leverage common fields.
+    Inherits from AbstractObservation to leverage common fields.
     """
+
     created_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
     task_type = models.CharField(
